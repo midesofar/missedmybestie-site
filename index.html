@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>missedmybestie</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+      background: #4d382b;
+      color: white;
+    }
+
+    body {
+      position: relative;
+    }
+
+    /* ===== ART BACKGROUND ===== */
+    .bg {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      z-index: 0;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(255, 0, 0, 0.12), transparent 25%),
+        radial-gradient(circle at 80% 30%, rgba(255, 255, 255, 0.08), transparent 22%),
+        radial-gradient(circle at 50% 80%, rgba(0, 0, 0, 0.22), transparent 30%),
+        linear-gradient(135deg, #5c4332 0%, #463327 35%, #3a2a20 70%, #2c1f18 100%);
+    }
+
+    .bg::before,
+    .bg::after {
+      content: "";
+      position: absolute;
+      width: 160vmax;
+      height: 160vmax;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 38%;
+      filter: blur(40px);
+      opacity: 0.35;
+      mix-blend-mode: screen;
+      animation: drift 24s ease-in-out infinite alternate;
+    }
+
+    .bg::before {
+      background:
+        conic-gradient(
+          from 180deg,
+          rgba(255, 0, 0, 0.18),
+          rgba(255, 255, 255, 0.08),
+          rgba(0, 0, 0, 0.16),
+          rgba(255, 0, 0, 0.12)
+        );
+    }
+
+    .bg::after {
+      width: 120vmax;
+      height: 120vmax;
+      opacity: 0.22;
+      filter: blur(70px);
+      animation-duration: 30s;
+      animation-direction: alternate-reverse;
+      background:
+        radial-gradient(circle at 30% 40%, rgba(255, 0, 0, 0.18), transparent 20%),
+        radial-gradient(circle at 70% 50%, rgba(255, 255, 255, 0.10), transparent 18%),
+        radial-gradient(circle at 50% 70%, rgba(0, 0, 0, 0.20), transparent 24%);
+    }
+
+    @keyframes drift {
+      0% {
+        transform: translate(-50%, -50%) rotate(0deg) scale(1);
+      }
+      100% {
+        transform: translate(-48%, -52%) rotate(18deg) scale(1.08);
+      }
+    }
+
+    .grain {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      opacity: 0.06;
+      pointer-events: none;
+      background-image:
+        radial-gradient(circle, rgba(255,255,255,0.4) 0.6px, transparent 0.7px);
+      background-size: 9px 9px;
+      mix-blend-mode: soft-light;
+    }
+
+    /* ===== NAV ===== */
+    .nav {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 22px 34px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 10;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand img {
+      width: 34px;
+      height: 34px;
+      object-fit: contain;
+      display: block;
+      filter: drop-shadow(0 0 10px rgba(255,0,0,0.18));
+    }
+
+    .brand span {
+      font-size: 15px;
+      letter-spacing: 0.6px;
+      font-weight: 600;
+    }
+
+    .nav-right {
+      display: flex;
+      gap: 20px;
+    }
+
+    .nav-right a {
+      color: white;
+      text-decoration: none;
+      font-size: 13px;
+      opacity: 0.92;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+
+    .nav-right a:hover {
+      opacity: 0.65;
+      transform: translateY(-1px);
+    }
+
+    /* ===== CENTER ===== */
+    .hero {
+      position: absolute;
+      inset: 0;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      perspective: 1200px;
+      padding: 20px;
+    }
+
+    .logo-stage {
+      position: relative;
+      width: min(34vw, 260px);
+      aspect-ratio: 1 / 1;
+      transform-style: preserve-3d;
+      animation: logoTurn 12s linear infinite;
+    }
+
+    /* Back depth layers using the same PNG */
+    .logo-layer {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      user-select: none;
+      -webkit-user-drag: none;
+      pointer-events: none;
+    }
+
+    .logo-layer.depth-1 {
+      transform: translateZ(-6px);
+      opacity: 0.22;
+      filter:
+        brightness(0.2)
+        saturate(1.2)
+        drop-shadow(0 0 8px rgba(255, 0, 0, 0.15));
+    }
+
+    .logo-layer.depth-2 {
+      transform: translateZ(-12px);
+      opacity: 0.16;
+      filter:
+        brightness(0.15)
+        saturate(1.2)
+        drop-shadow(0 0 10px rgba(255, 0, 0, 0.12));
+    }
+
+    .logo-layer.depth-3 {
+      transform: translateZ(-18px);
+      opacity: 0.10;
+      filter:
+        brightness(0.1)
+        saturate(1.1)
+        drop-shadow(0 0 12px rgba(255, 0, 0, 0.10));
+    }
+
+    .logo-layer.main {
+      transform: translateZ(0);
+      filter:
+        drop-shadow(0 20px 35px rgba(0,0,0,0.45))
+        drop-shadow(0 0 18px rgba(255,0,0,0.22));
+    }
+
+    .logo-glow {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 68%;
+      height: 68%;
+      transform: translate(-50%, -50%) translateZ(-24px);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,0,0,0.20), rgba(255,255,255,0.07), transparent 70%);
+      filter: blur(24px);
+      pointer-events: none;
+    }
+
+    @keyframes logoTurn {
+      0% {
+        transform: rotateX(4deg) rotateY(0deg);
+      }
+      50% {
+        transform: rotateX(-2deg) rotateY(180deg);
+      }
+      100% {
+        transform: rotateX(4deg) rotateY(360deg);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav {
+        padding: 18px 18px;
+      }
+
+      .brand span {
+        font-size: 13px;
+      }
+
+      .nav-right {
+        gap: 12px;
+      }
+
+      .nav-right a {
+        font-size: 12px;
+      }
+
+      .logo-stage {
+        width: min(58vw, 220px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg"></div>
+  <div class="grain"></div>
+
+  <div class="nav">
+    <div class="brand">
+      <img src="logo.png" alt="missedmybestie logo small" />
+      <span>missedmybestie</span>
+    </div>
+
+    <div class="nav-right">
+      <a href="#">Home</a>
+      <a href="#">Music</a>
+      <a href="#">Contact</a>
+      <a href="#">About</a>
+    </div>
+  </div>
+
+  <main class="hero">
+    <div class="logo-stage">
+      <div class="logo-glow"></div>
+      <img src="logo.png" alt="missedmybestie logo depth 3" class="logo-layer depth-3" />
+      <img src="logo.png" alt="missedmybestie logo depth 2" class="logo-layer depth-2" />
+      <img src="logo.png" alt="missedmybestie logo depth 1" class="logo-layer depth-1" />
+      <img src="logo.png" alt="missedmybestie logo main" class="logo-layer main" />
+    </div>
+  </main>
+</body>
+</html>
