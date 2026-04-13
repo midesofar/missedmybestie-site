@@ -17,19 +17,17 @@
       margin: 0;
       width: 100%;
       height: 100%;
-      overflow: hidden;
       font-family: 'Space Grotesk', sans-serif;
       background: #1e130f;
       color: white;
+      overflow: hidden;
     }
 
-    body {
-      position: relative;
-    }
+    body { position: relative; }
 
     /* ===== DARK BACKGROUND ===== */
     .bg {
-      position: absolute;
+      position: fixed;
       inset: 0;
       z-index: 0;
       background:
@@ -41,7 +39,7 @@
 
     /* ===== ZIGZAG OVERLAY ===== */
     .zigzag-wrap {
-      position: absolute;
+      position: fixed;
       inset: 0;
       z-index: 1;
       overflow: hidden;
@@ -87,16 +85,12 @@
     }
 
     @keyframes drift {
-      from {
-        transform: translate3d(0, 0, 0) scale(1.05);
-      }
-      to {
-        transform: translate3d(-70px, -40px, 0) scale(1.1);
-      }
+      from { transform: translate3d(0, 0, 0) scale(1.05); }
+      to   { transform: translate3d(-70px, -40px, 0) scale(1.1); }
     }
 
     .grain {
-      position: absolute;
+      position: fixed;
       inset: 0;
       z-index: 2;
       opacity: 0.035;
@@ -108,7 +102,7 @@
 
     /* ===== NAV ===== */
     .nav {
-      position: absolute;
+      position: fixed;
       top: 0;
       left: 0;
       width: 100%;
@@ -116,7 +110,8 @@
       display: flex;
       justify-content: flex-end;
       align-items: center;
-      z-index: 10;
+      z-index: 20;
+      background: linear-gradient(to bottom, rgba(20,10,8,0.7) 0%, transparent 100%);
     }
 
     .nav-right {
@@ -130,19 +125,34 @@
       font-size: 13px;
       font-weight: 400;
       letter-spacing: 0.5px;
+      cursor: pointer;
       transition: opacity 0.25s ease, transform 0.25s ease;
     }
 
-    .nav-right a:hover {
-      opacity: 0.6;
-      transform: translateY(-1px);
+    .nav-right a:hover { opacity: 0.6; transform: translateY(-1px); }
+    .nav-right a.active {
+      opacity: 1;
+      border-bottom: 1px solid rgba(255,0,0,0.7);
+      padding-bottom: 2px;
     }
 
-    /* ===== HERO ===== */
-    .hero {
-      position: absolute;
+    /* ===== PAGES ===== */
+    .page {
+      position: fixed;
       inset: 0;
       z-index: 5;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+
+    .page.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    /* ===== HOME PAGE ===== */
+    #page-home {
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -161,12 +171,8 @@
     }
 
     @keyframes rotate3d {
-      0% {
-        transform: rotateX(2deg) rotateY(0deg);
-      }
-      100% {
-        transform: rotateX(2deg) rotateY(360deg);
-      }
+      0%   { transform: rotateX(2deg) rotateY(0deg); }
+      100% { transform: rotateX(2deg) rotateY(360deg); }
     }
 
     .logo-layer {
@@ -188,29 +194,10 @@
         drop-shadow(0 0 12px rgba(255,255,255,0.10));
     }
 
-    .depth1 {
-      transform: translateZ(-14px) scaleX(1.24) scaleY(1.06);
-      opacity: 0.24;
-      filter: brightness(0.48) saturate(1.08);
-    }
-
-    .depth2 {
-      transform: translateZ(-28px) scaleX(1.28) scaleY(1.06);
-      opacity: 0.17;
-      filter: brightness(0.34) saturate(1.05);
-    }
-
-    .depth3 {
-      transform: translateZ(-42px) scaleX(1.32) scaleY(1.06);
-      opacity: 0.12;
-      filter: brightness(0.24) saturate(1.02);
-    }
-
-    .depth4 {
-      transform: translateZ(-56px) scaleX(1.36) scaleY(1.06);
-      opacity: 0.08;
-      filter: brightness(0.16);
-    }
+    .depth1 { transform: translateZ(-14px) scaleX(1.24) scaleY(1.06); opacity: 0.24; filter: brightness(0.48) saturate(1.08); }
+    .depth2 { transform: translateZ(-28px) scaleX(1.28) scaleY(1.06); opacity: 0.17; filter: brightness(0.34) saturate(1.05); }
+    .depth3 { transform: translateZ(-42px) scaleX(1.32) scaleY(1.06); opacity: 0.12; filter: brightness(0.24) saturate(1.02); }
+    .depth4 { transform: translateZ(-56px) scaleX(1.36) scaleY(1.06); opacity: 0.08; filter: brightness(0.16); }
 
     .glow {
       position: absolute;
@@ -234,70 +221,247 @@
       color: rgba(255,255,255,0.82);
     }
 
+    /* ===== MUSIC PAGE ===== */
+    #page-music {
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    .music-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 120px 40px 80px;
+    }
+
+    .music-header {
+      margin-bottom: 52px;
+    }
+
+    .music-header h1 {
+      font-size: clamp(28px, 5vw, 52px);
+      font-weight: 600;
+      letter-spacing: -1px;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .music-header .sub {
+      font-size: 12px;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+    }
+
+    .section-label {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(255,0,0,0.75);
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(255,255,255,0.06);
+    }
+
+    .featured-section { margin-bottom: 56px; }
+    .tracks-section   { margin-bottom: 56px; }
+    .artist-section   { margin-bottom: 48px; }
+
+    .embed-wrap {
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.02);
+    }
+
+    .embed-wrap iframe {
+      display: block;
+      width: 100%;
+      border: none;
+      border-radius: 10px;
+      filter: brightness(0.96) contrast(1.02) saturate(0.85);
+    }
+
+    .track-embeds-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .track-embed-item {
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.05);
+      background: rgba(255,255,255,0.015);
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .track-embed-item:hover {
+      border-color: rgba(255,0,0,0.2);
+      box-shadow: 0 0 24px rgba(255,0,0,0.06);
+    }
+
+    .track-embed-item iframe {
+      display: block;
+      width: 100%;
+      border: none;
+      filter: brightness(0.95) saturate(0.8);
+    }
+
+    .footer-note {
+      font-size: 11px;
+      color: rgba(255,255,255,0.2);
+      letter-spacing: 1px;
+      text-align: center;
+      padding-top: 32px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* ===== RESPONSIVE ===== */
     @media (max-width: 768px) {
-      .nav {
-        padding: 18px 18px;
-      }
-
-      .nav-right {
-        gap: 12px;
-      }
-
-      .nav-right a {
-        font-size: 12px;
-      }
-
-      .logo-stage {
-        width: 290px;
-        height: 230px;
-      }
-
-      .glow {
-        width: 220px;
-        height: 220px;
-      }
-
-      .coming-soon {
-        font-size: 12px;
-        letter-spacing: 2px;
-      }
+      .nav { padding: 18px 18px; }
+      .nav-right { gap: 12px; }
+      .nav-right a { font-size: 12px; }
+      .logo-stage { width: 290px; height: 230px; }
+      .glow { width: 220px; height: 220px; }
+      .coming-soon { font-size: 12px; letter-spacing: 2px; }
+      .music-inner { padding: 100px 18px 60px; }
+      .track-embeds-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
 
   <div class="bg"></div>
-
   <div class="zigzag-wrap">
     <div class="zigzag red"></div>
     <div class="zigzag white"></div>
   </div>
-
   <div class="grain"></div>
 
+  <!-- NAV -->
   <div class="nav">
     <div class="nav-right">
-      <a href="#">Home</a>
-      <a href="#">Music</a>
+      <a onclick="showPage('home')" class="active" id="nav-home">Home</a>
+      <a onclick="showPage('music')" id="nav-music">Music</a>
       <a href="#">Contact</a>
       <a href="#">About</a>
       <a href="#">Clothing</a>
     </div>
   </div>
 
-  <main class="hero">
+  <!-- HOME PAGE -->
+  <div class="page active" id="page-home">
     <div class="logo-stage">
       <div class="glow"></div>
-
       <img src="logo.png" class="logo-layer depth4" alt="">
       <img src="logo.png" class="logo-layer depth3" alt="">
       <img src="logo.png" class="logo-layer depth2" alt="">
       <img src="logo.png" class="logo-layer depth1" alt="">
       <img src="logo.png" class="logo-layer main" alt="missedmybestie logo">
     </div>
-
     <div class="coming-soon">Coming Soon</div>
-  </main>
+  </div>
+
+  <!-- MUSIC PAGE -->
+  <div class="page" id="page-music">
+    <div class="music-inner">
+
+      <div class="music-header">
+        <h1>Music</h1>
+        <div class="sub">missedmybestie · 2023–2026</div>
+      </div>
+
+      <!-- LATEST RELEASE -->
+      <div class="featured-section">
+        <div class="section-label">Latest Release</div>
+        <div class="embed-wrap">
+          <iframe
+            src="https://open.spotify.com/embed/album/6xxxEYsqhree6X9WPCIVgB?utm_source=generator&theme=0"
+            height="152"
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="lazy">
+          </iframe>
+        </div>
+      </div>
+
+      <!-- POPULAR TRACKS -->
+      <div class="tracks-section">
+        <div class="section-label">Popular Tracks</div>
+        <div class="track-embeds-grid">
+
+          <div class="track-embed-item">
+            <iframe src="https://open.spotify.com/embed/album/6fXUG18YLJd7lnZoQJ3SGg?utm_source=generator&theme=0"
+              height="152" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+          </div>
+
+          <div class="track-embed-item">
+            <iframe src="https://open.spotify.com/embed/album/2OpV8XBb9DGxzXUGSGf72n?utm_source=generator&theme=0"
+              height="152" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+          </div>
+
+          <div class="track-embed-item">
+            <iframe src="https://open.spotify.com/embed/album/5yp7oswUEJpTGlOfSdY4T2?utm_source=generator&theme=0"
+              height="152" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+          </div>
+
+          <div class="track-embed-item">
+            <iframe src="https://open.spotify.com/embed/album/4woCIlNJMLNICjZljr3Ydr?utm_source=generator&theme=0"
+              height="152" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+          </div>
+
+          <div class="track-embed-item">
+            <iframe src="https://open.spotify.com/embed/album/6hG1AJjEG1RRJO5hETwa8L?utm_source=generator&theme=0"
+              height="152" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+          </div>
+
+          <div class="track-embed-item">
+            <iframe src="https://open.spotify.com/embed/album/3nq50xAffaV75KzSA6qhAQ?utm_source=generator&theme=0"
+              height="152" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- FULL DISCOGRAPHY -->
+      <div class="artist-section">
+        <div class="section-label">Full Discography</div>
+        <div class="embed-wrap">
+          <iframe
+            src="https://open.spotify.com/embed/artist/3wz072OZ5ZkxD6D6Io5XfI?utm_source=generator&theme=0"
+            height="352"
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="lazy">
+          </iframe>
+        </div>
+      </div>
+
+      <div class="footer-note">Streaming via Spotify · missedmybestie © 2026</div>
+
+    </div>
+  </div>
+
+  <script>
+    function showPage(name) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-right a[id^="nav-"]').forEach(a => a.classList.remove('active'));
+
+      document.getElementById('page-' + name).classList.add('active');
+      const navLink = document.getElementById('nav-' + name);
+      if (navLink) navLink.classList.add('active');
+
+      // lock scroll on home, enable on music
+      document.body.style.overflow = name === 'music' ? 'hidden' : 'hidden';
+      document.getElementById('page-music').style.overflowY = name === 'music' ? 'auto' : 'hidden';
+    }
+  </script>
 
 </body>
 </html>
